@@ -22,9 +22,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           p = Path("swinglab-source.zip")
-          data = p.read_bytes()
-          # Repair a same-length filename typo in the central-directory entry.
-          data = data.replace(b"SwingLabWidget.kw", b"SwingLabWidget.kt")
+          data = p.read_bytes().replace(b"SwingLabWidget.kw", b"SwingLabWidget.kt")
           p.write_bytes(data)
           import zipfile
           with zipfile.ZipFile(p) as z:
@@ -40,8 +38,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Configure preinstalled Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -d "$ANDROID_HOME/platforms/android-35" || "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+          echo "sdk.dir=$ANDROID_HOME" > SwingLab-project/local.properties
 
       - name: Set up Gradle 8.9
         uses: gradle/actions/setup-gradle@v6
