@@ -42,6 +42,9 @@ jobs:
           widget_source = widget_source.replace("import androidx.glance.layout.defaultWeight\n", "")
           widget_source = widget_source.replace("Spacer(GlanceModifier.defaultWeight())", "Spacer(GlanceModifier.height(8.dp))")
           widget.write_text(widget_source)
+          print("===== SWINGLAB WIDGET SOURCE =====")
+          print(widget.read_text())
+          print("===== END SWINGLAB WIDGET SOURCE =====")
           activity = Path("SwingLab-project/app/src/main/java/com/swinglab/MainActivity.kt")
           activity_source = activity.read_text()
           if "import androidx.glance.appwidget.updateAll" not in activity_source:
