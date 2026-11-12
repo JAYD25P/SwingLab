@@ -30,6 +30,11 @@ jobs:
               if bad:
                   raise SystemExit(f"Corrupt archive member: {bad}")
               z.extractall("SwingLab-project")
+          widget = Path("SwingLab-project/app/src/main/java/com/swinglab/widget/SwingLabWidget.kt")
+          source = widget.read_text()
+          if "import androidx.compose.ui.unit.dp" not in source:
+              source = source.replace("package com.swinglab.widget\n", "package com.swinglab.widget\n\nimport androidx.compose.ui.unit.dp\n", 1)
+              widget.write_text(source)
           PY
 
       - name: Set up JDK 17
