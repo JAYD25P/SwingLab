@@ -35,6 +35,8 @@ jobs:
           widget = Path("SwingLab-project/app/src/main/java/com/swinglab/widget/SwingLabWidget.kt")
           source = widget.read_text()
           source = source.replace("import androidx.compose.ui.unit.dp\n", "")
+          if "import androidx.glance.unit.dp" not in source:
+              source = source.replace("package com.swinglab.widget\n", "package com.swinglab.widget\n\nimport androidx.glance.unit.dp\n", 1)
           widget.write_text(source)
           widget_source = widget.read_text()
           widget_source = widget_source.replace("import androidx.glance.layout.defaultWeight\n", "")
