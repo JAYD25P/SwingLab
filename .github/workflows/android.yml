@@ -30,6 +30,8 @@ jobs:
               if bad:
                   raise SystemExit(f"Corrupt archive member: {bad}")
               z.extractall("SwingLab-project")
+          import shutil
+          shutil.copyfile("patches/MarketData.kt", "SwingLab-project/app/src/main/java/com/swinglab/data/MarketData.kt")
           widget = Path("SwingLab-project/app/src/main/java/com/swinglab/widget/SwingLabWidget.kt")
           source = widget.read_text()
           if "import androidx.compose.ui.unit.dp" not in source:
@@ -45,6 +47,16 @@ jobs:
           if "import androidx.glance.appwidget.updateAll" not in activity_source:
               activity_source = activity_source.replace("package com.swinglab\n", "package com.swinglab\n\nimport androidx.glance.appwidget.updateAll\n", 1)
               activity.write_text(activity_source)
+          activity_source = activity.read_text()
+          activity_source = activity_source.replace("TwelveDataProvider", "BharatStockProvider")
+          activity_source = activity_source.replace('"RELIANCE:NSE", "TCS:NSE", "HDFCBANK:NSE", "ICICIBANK:NSE", "INFY:NSE"', '"RELIANCE", "TCS", "HDFCBANK", "ICICIBANK", "INFY"')
+          activity_source = activity_source.replace("Live provider response", "BharatStock EOD response")
+          activity_source = activity_source.replace("No live quotes loaded. Add a provider key in Settings, then refresh.", "No prices loaded. Add your free BharatStock key in Settings, then refresh.")
+          activity_source = activity_source.replace("Market prices are provider-sourced. They may be delayed or unavailable under your plan.", "BharatStock supplies end-of-day prices, not streaming intraday quotes. Free plan: 60 requests/day and about one year of history.")
+          activity_source = activity_source.replace("Twelve Data REST • NSE symbols • Quote + daily candles", "BharatStock • NSE equities • End-of-day prices + daily OHLCV")
+          activity_source = activity_source.replace("Twelve Data API key", "BharatStock API key")
+          activity_source = activity_source.replace("Obtain a key at twelvedata.com. Provider plan determines real-time NSE access, supported symbols and rate limits. Never share or commit your key.", "Get a free key at bharatstockapi.com (no card required). Free tier: 60 requests/day and approximately one year of price history. Data is end-of-day, not live intraday. Keep your key private.")
+          activity.write_text(activity_source)
           PY
 
       - name: Set up JDK 17
