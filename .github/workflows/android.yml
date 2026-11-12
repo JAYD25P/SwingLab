@@ -36,14 +36,14 @@ jobs:
               source = source.replace("package com.swinglab.widget\n", "package com.swinglab.widget\n\nimport androidx.compose.ui.unit.dp\n", 1)
               widget.write_text(source)
           widget_source = widget.read_text()
-          widget_source = widget_source.replace("import androidx.glance.layout.defaultWeight\\n", "")
-          widget_source = widget_source.replace("import androidx.glance.unit.dp\\n", "")
+          widget_source = widget_source.replace("import androidx.glance.layout.defaultWeight\n", "")
+          widget_source = widget_source.replace("import androidx.glance.unit.dp\n", "")
           widget_source = widget_source.replace("Spacer(GlanceModifier.defaultWeight())", "Spacer(GlanceModifier.height(8.dp))")
           widget.write_text(widget_source)
           activity = Path("SwingLab-project/app/src/main/java/com/swinglab/MainActivity.kt")
           activity_source = activity.read_text()
           if "import androidx.glance.appwidget.updateAll" not in activity_source:
-              activity_source = activity_source.replace("package com.swinglab\\n", "package com.swinglab\\n\\nimport androidx.glance.appwidget.updateAll\\n", 1)
+              activity_source = activity_source.replace("package com.swinglab\n", "package com.swinglab\n\nimport androidx.glance.appwidget.updateAll\n", 1)
               activity.write_text(activity_source)
           PY
 
