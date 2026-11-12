@@ -57,6 +57,14 @@ jobs:
           activity_source = activity_source.replace("Twelve Data API key", "BharatStock API key")
           activity_source = activity_source.replace("Obtain a key at twelvedata.com. Provider plan determines real-time NSE access, supported symbols and rate limits. Never share or commit your key.", "Get a free key at bharatstockapi.com (no card required). Free tier: 60 requests/day and approximately one year of price history. Data is end-of-day, not live intraday. Keep your key private.")
           activity.write_text(activity_source)
+          app_readme = Path("SwingLab-project/README.md")
+          if app_readme.exists():
+              readme_text = app_readme.read_text()
+              readme_text = readme_text.replace("Twelve Data REST provider adapter for quotes and daily OHLC time series", "BharatStock REST provider adapter for end-of-day quotes and daily OHLCV history")
+              readme_text = readme_text.replace("Twelve Data", "BharatStock")
+              readme_text = readme_text.replace("twelvedata.com", "bharatstockapi.com")
+              readme_text = readme_text.replace("real-time NSE access", "end-of-day NSE data")
+              app_readme.write_text(readme_text)
           PY
 
       - name: Set up JDK 17
