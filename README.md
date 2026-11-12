@@ -1,36 +1,39 @@
-# SwingLab
+# SwingLab Android
 
-SwingLab is an Android learning, stock-analysis and paper-trading prototype for Indian equities. The current implementation uses a dark Jetpack Compose interface and a configurable Twelve Data REST provider.
+SwingLab is a dark-mode Indian-equities swing-trading study and paper-trading app.
 
-## Repository layout
+## Included
+- Compose dashboard, NSE watchlist, scanner, risk calculator, paper-trade journal and learning notes
+- BharatStock REST integration for Indian equities and daily OHLCV history
+- ATH-window and simplified Darvas-range candidate detection using retrieved daily candles
+- Paper trades stored locally; no broker order placement
+- Android home-screen widget showing the latest refreshed watchlist snapshot
+- GitHub Actions debug APK build
 
-- `SwingLab-Android-Source.zip.b64` — Base64-encoded initial Android Studio source archive.
-- `.github/workflows/android.yml` — CI workflow that decodes the archive and builds a debug APK.
-- `BUILDING.md` — local setup and build instructions.
+## Free market-data setup
+1. Create a free account and generate an API key at https://bharatstockapi.com/ (the free key does not require a payment card).
+2. In SwingLab > Settings, paste the key and save it.
+3. Tap Refresh to load the default NSE watchlist: RELIANCE, TCS, HDFCBANK, ICICIBANK and INFY.
+4. Use Run scan to retrieve daily OHLCV history and evaluate the starter breakout rules.
 
-The source archive is encoded as text so it can be stored through the repository file API. Decode it before opening the Android project.
+The free plan currently lists 60 requests per day and approximately one year of price history. Data is end-of-day (EOD), not streaming or intraday real-time. A refresh uses one request per watchlist symbol; a full scan uses quote and history requests per symbol, so avoid repeated scans. See provider documentation and current limits at https://bharatstockapi.com/.
 
-## Features in this prototype
+## Build locally
+- Android Studio Ladybug or newer
+- JDK 17
+- Android SDK 35
 
-- Market overview and NSE watchlist for RELIANCE, TCS, HDFCBANK, ICICIBANK and INFY.
-- Twelve Data quote and daily OHLC requests.
-- Starter ATH-window and simplified 20-session range breakout candidate checks.
-- Position sizing and risk/reward calculator.
-- Paper setup journal (currently in-memory; entries are not yet persisted across app restarts).
-- Learning notes on market direction, relative strength, sector rotation, ATH, Darvas and risk.
-- Android home-screen widget displaying the last quote snapshot after an in-app refresh.
-- GitHub Actions debug APK workflow.
+Open this repository in Android Studio and run `:app:assembleDebug`, or use the GitHub Actions workflow.
 
-## Live data
+## GitHub Actions APK
+Push to `main`. Open **Actions > SwingLab Android APK > latest run > Artifacts > SwingLab-debug-apk**.
+The APK is a debug build for testing, not a Play Store release.
 
-Create a Twelve Data account and add your API key under Settings in the app. Exchange coverage, real-time access, symbol syntax and request limits depend on your Twelve Data subscription. The app must not be treated as a guaranteed real-time feed until you confirm the entitlement for NSE symbols in your account.
-
-## Strategy attribution and limitations
-
-These are transparent educational starter rules, not a verified reproduction of Atul Patel's proprietary or complete trading system. ATH uses the fetched history window (up to 500 daily bars), which may not represent the true lifetime all-time high. Darvas detection is simplified. Scanner results require manual chart, volume, liquidity and market-context review.
-
-Paper mode does not connect to a broker and cannot place orders. The current journal is a prototype, not a full trade lifecycle or P&L ledger. No live-money execution is implemented.
-
-## Build
-
-See [BUILDING.md](BUILDING.md). The workflow produces a debug APK artifact for testing, not a signed Play Store release.
+## Important limitations
+- This is an educational tool, not investment advice or a recommendation service.
+- Data is end-of-day; it is unsuitable for intraday decisions or real-time alerts.
+- Free API quotas and history limits are provider-controlled and may change.
+- The scanner's ATH is limited to the history returned by the free plan (about one year), not the lifetime ATH.
+- Darvas detection is a simplified range-breakout candidate detector and must be reviewed on the chart.
+- No automatic trading, broker connectivity, options, margin or real-money execution.
+- API key is stored locally on device. Do not publish it or commit it. For a public multi-user app, move provider credentials behind a secure backend.
